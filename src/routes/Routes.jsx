@@ -5,6 +5,12 @@ import HomeLayout from '../layouts/HomeLayout';
 import LatestNews from '../components/LatestNews';
 import Home from '../pages/Home';
 import CategoryNews from '../pages/CategoryNews';
+import Login from '../pages/Login';
+import Register from '../pages/Register';
+import AuthLayout from '../layouts/AuthLayout';
+import NewsDetails from '../pages/NewsDetails';
+import PrivateRoute from '../Provider/PrivateRoute';
+import Loading from '../pages/Loading';
 
 
 
@@ -23,18 +29,41 @@ import CategoryNews from '../pages/CategoryNews';
                     path:"/category/:id",
                     element: <CategoryNews></CategoryNews>,
                     loader: () => fetch("/news.json"),
+                    hydrateFallbackElement: <Loading></Loading>
                 },
              
             ]
 
         },
+     
         {
-            path:"/auth",
-            element: <LatestNews></LatestNews>
+            path:"/",
+            element: <LatestNews></LatestNews>,
+          
         },
         {
-            path:"/news",
-            element: <h2>News Layout</h2>
+            path:"/auth",
+            element: <AuthLayout></AuthLayout>,
+              children:[
+                {
+                    path:"/auth/login",
+                    element:<Login></Login>
+                },
+                {
+                    path:"/auth/register",
+                    element: <Register></Register>
+                },
+            ]
+          
+        },
+
+        {
+            path:"/news-details/:id",
+            element:(<PrivateRoute>
+                <NewsDetails></NewsDetails>
+            </PrivateRoute>),
+            loader: ()=> fetch("/news.json"),
+              hydrateFallbackElement: <Loading></Loading>
         },
         {
             path:"/*",
